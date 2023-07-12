@@ -31,7 +31,10 @@ export const authOptions: NextAuthOptions = {
       );
       return encodedToken;
     },
-    decode: async ({ secret, token }) => {},
+    decode: async ({ secret, token }) => {
+      const decodedToken = jsonwebtoken.verify(token!, secret) as JWT;
+      return decodedToken;
+    },
   },
   theme: {
     colorScheme: "light",
@@ -47,7 +50,7 @@ export const authOptions: NextAuthOptions = {
 
         const newSession = {
           ...session,
-          data: {
+          user: {
             ...session.user,
             ...data?.user,
           },

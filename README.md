@@ -42,3 +42,10 @@ npx grafbase dev
 openssl rand -base64 32
 
 run on terminalto generate
+
+## To fix google image load error
+
+add below data in next.config.js
+images: {
+domains: ["lh3.googleusercontent.com"],
+}
