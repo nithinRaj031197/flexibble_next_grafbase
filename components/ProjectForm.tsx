@@ -6,6 +6,8 @@ import FormField from "./FormField";
 import Button from "./Button";
 import CustomMenu from "./CustomMenu";
 import { categoryFilters } from "@/constants";
+import { createNewProject, fetchToken } from "@/lib/actions";
+import { useRouter } from "next/navigation";
 
 type Props = {
   type: string;
@@ -24,6 +26,8 @@ const ProjectForm = ({ type, session, project }: Props) => {
     githubUrl: project?.githubUrl || "",
     category: project?.category || "",
   });
+
+  const router = useRouter();
 
   const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -51,7 +55,31 @@ const ProjectForm = ({ type, session, project }: Props) => {
     });
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {};
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setSubmitting(true);
+
+    const { token } = await fetchToken();
+
+    try {
+      if (type === "create") {
+        await createNewProject(form, session?.user?.id, token);
+
+        router.push("/");
+      }
+
+      // if (type === "edit") {
+      //     await updateProject(form, project?.id as string, token)
+
+      //     router.push("/")
+      // }
+    } catch (error) {
+      alert(`Failed to ${type === "create" ? "create" : "edit"} a project. Try again!`);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <form onSubmit={handleFormSubmit} className="flexStart form">

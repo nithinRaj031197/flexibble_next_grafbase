@@ -49,3 +49,7 @@ add below data in next.config.js
 images: {
 domains: ["lh3.googleusercontent.com"],
 }
+
+## Reminder:
+
+Maintain next.config.js
